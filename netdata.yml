@@ -1,7 +1,5 @@
 ---
 - hosts: all
-  remote_user: root
-  become: yes
   tasks: 
   - name: Create folder for installer
     file:
@@ -14,4 +12,5 @@
       dest: /home/ans/netdata
       mode: 0775
   - name: Run netdata installer
-    command: /home/ans/netdata/kickstart.sh all --non-interactive
+    command: /home/ans/netdata/kickstart.sh all --dont-wait
+    become: true
