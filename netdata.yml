@@ -13,5 +13,5 @@
       owner: ans
       mode: o+x
   - name: Run netdata installer
-    command: /home/ans/netdata/kickstart.sh all --dont-wait
+    command: /home/ans/netdata/kickstart.sh --dont-wait
     become: true
