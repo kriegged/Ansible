@@ -5,12 +5,13 @@
     file:
       path: /home/ans/netdata
       state: directory
-      mode: 0755
-  - name: Download netdata kickstart.sh installer file
-    get_url:
-      url: https://my-netdata.io/kickstart.sh
-      dest: /home/ans/netdata
       mode: 0775
+  - name: Copy netdata kickstart.sh installer file
+    copy:
+      src: /home/ans/myplatform/files/kickstart.sh
+      dest: /home/ans/netdata/kickstart.sh
+      owner: ans
+      mode: o+x
   - name: Run netdata installer
     command: /home/ans/netdata/kickstart.sh all --dont-wait
     become: true
