@@ -2,16 +2,23 @@
 - hosts: Gentoo
   tasks: 
   - name: Create folder for installer
+    stat:
+      path: /etc/portage/package.accept_keywords
+    register: stat_result
+
+  - name: Create the file, if it doesnt exist already
     file:
-      path: /home/ans/netdata
-      state: directory
-      mode: 0775
-  - name: Copy netdata kickstart.sh installer file
-    copy:
-      src: /home/ans/myplatform/files/kickstart.sh
-      dest: /home/ans/netdata/kickstart.sh
-      owner: ans
-      mode: o+x
-  - name: Run netdata installer
-    command: /home/ans/netdata/kickstart.sh all --dont-wait
+      path: /etc/portage/package.accept_keywords
+      state: touch
+    when: stat_result.stat.exists == False
+    become: true
+      
+  - name: Add netdata entry in package.accept_keywords if not present
+    lineinfile:
+      path: /etc/portage/package.accept_keywords
+      line: '=net-analyzer/netdata-1.9.0 ~amd64'
+    become: true
+
+  - name: Emerge netdata
+    command: emerge -q netdata
     become: true
