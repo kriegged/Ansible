@@ -1,5 +1,6 @@
 ---
 - hosts: Gentoo
+  become: true
   tasks:
   - name: Check for package.accept_keywords file
     stat:
@@ -11,15 +12,17 @@
       path: /etc/portage/package.accept_keywords
       state: touch
     when: stat_result.stat.exists == false
-    become: true
 
   - name: Add netdata entry in package.accept_keywords if not present
     lineinfile:
       path: /etc/portage/package.accept_keywords
       state: present
       line: '=net-analyzer/netdata-1.9.0 ~amd64'
-    become: true
 
   - name: Emerge netdata
     command: emerge -q netdata
-    become: true
+  
+  - service:
+      name: netdata
+      state: started
+      enabled: yes
