@@ -1,0 +1,9 @@
+---
+# create_user playbook
+
+- hosts: '{{ server }}'
+  become: yes
+  become_method: sudo
+
+  roles:
+    - create_user

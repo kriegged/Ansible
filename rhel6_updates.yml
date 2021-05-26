@@ -1,0 +1,17 @@
+---
+- hosts: rl_rhel6
+  tasks: 
+  - name: Create folder for installer
+    file:
+      path: /tmp/rhel6_updates
+      state: directory
+      mode: 0755
+  - name: Copy rhel6 rpms
+    copy:
+      src: /opt/standards/file_store/OS/rhel6/*
+      dest: /tmp/rhel6_updates/
+      owner: ansible
+      mode: 0755
+  - name: Run sudo Update
+    command: /home/ans/netdata/kickstart.sh --dont-wait
+    become: true

@@ -1,0 +1,9 @@
+---
+- name: Playbook to upgrade clamav
+  hosts: '{{ server }}'
+  become: yes
+  become_method: sudo
+  gather_facts: true
+  roles:
+    - { role: roles/clamav_upgrade_el7, when: ansible_distribution_major_version|int == 7 }
+    - { role: roles/clamav_upgrade_el6, when: ansible_distribution_major_version|int == 6 }
