@@ -1,34 +1,31 @@
 ---
 - hosts: all
-  tasks: 
-  - name: Create folder for installer
-    file:
-      path: /tmp/rhel6_updates
-      state: directory
-      mode: 0755
-    when: ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"
+  become: yes
+  become_method: sudo
+  become_user: root
+  tasks:
   - name: Copy rhel6 rpms
     copy:
-      src: /opt/standards/file_store/OS/rhel6/*
-      dest: /tmp/rhel6_updates/
+      src: /opt/standards/file_store/OS/rhel6
+      dest: /tmp
     when: ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"
   - name: Install sudo 1.8.6 from file
     yum:
-      name: /tmp/rhel6_updates/sudo-1.8.6p3-29.el6_10.4.x86_64.rpm
+      name: /tmp/rhel6/sudo-1.8.6p3-29.el6_10.4.x86_64.rpm
       state: present
     when: ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"
   - name: Install snmp 5.5.60 from file
     yum:
-      name: /tmp/rhel6_updates/net-snmp-5.5-60.el6_10.2.x86_64.rpm
+      name: /tmp/rhel6/net-snmp-5.5-60.el6_10.2.x86_64.rpm
       state: present
     when: ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"
   - name: Install kernel firmware 2.6.32 from file
     yum:
-      name: /tmp/rhel6_updates/kernel-firmware-2.6.32-754.36.1.el6.noarch.rpm
+      name: /tmp/rhel6/kernel-firmware-2.6.32-754.36.1.el6.noarch.rpm
       state: present
     when: ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"
   - name: Install kernel 2.6.32 from file
     yum:
-      name: /tmp/rhel6_updates/kernel-2.6.32-754.36.1.el6.x86_64.rpm
+      name: /tmp/rhel6/kernel-2.6.32-754.36.1.el6.x86_64.rpm
       state: present
     when: ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"
