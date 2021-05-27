@@ -1,0 +1,7 @@
+---
+- hosts: all
+  tasks: 
+  - name: "Show RedHat version"
+    command: /bin/cat /etc/redhat-release
+    register: cat
+    when: ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"
