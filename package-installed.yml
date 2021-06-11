@@ -1,0 +1,14 @@
+---
+- name: Verify hosts
+  hosts: "{{ hosts | default('all') }}"
+  become: yes
+  become_method: sudo
+  become_user: root
+  tasks:
+
+  - name: Gather package facts
+    package_facts:
+      manager: "auto"
+
+  - name: show package version
+    debug: var=ansible_facts.packages.apache2[0].version

@@ -1,0 +1,15 @@
+---
+- name: Inventory
+  hosts: "{{ hosts | default('localhost') }}"
+  vars:
+    package_names:
+      - vim
+  tasks:
+    - name: "Check if vim package is installed or not on Red Hat Linux family"
+      command: rpm -q "{{ item }}"
+      loop: "{{ package_names }}"
+      register: package_check
+      when: ansible_facts['os_family'] == "RedHat"
+
+- debug:
+    msg: "Current Content base URL is: {{ baseurl_result.stdout_lines }}"

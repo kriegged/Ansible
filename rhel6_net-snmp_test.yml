@@ -1,0 +1,16 @@
+---
+- hosts: iv-app01.prd.paygateway.com
+  become: yes
+  become_method: sudo
+  become_user: root
+  tasks:
+  - name: Gather the package facts
+    ansible.builtin.package_facts:
+      manager: auto
+  - name: Copy rhel6 net-snmp-libs 5.5 rpm
+    copy:
+      src: /opt/standards/file_store/OS/rhel6/net-snmp-libs-5.5-60.el6_10.2.x86_64.rpm
+      dest: /tmp
+    when:
+      - ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"
+      - packages == "net-snmp" and net-snmp['version'] < "5.5"

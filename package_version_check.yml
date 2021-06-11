@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  become_user: root
+  tasks:
+  - name: Check whether a package called foobar is installed
+    ansible.builtin.debug:
+      msg: "{{ ansible_facts.packages['net-snmp'] | length }} versions of net-snmp are installed!"
+    when: "'net-snmp' in ansible_facts.packages"
