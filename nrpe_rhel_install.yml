@@ -1,0 +1,21 @@
+---
+- name: NRPE Install
+  become: yes
+  become_method: sudo
+  tasks:
+   - name: Gather the rpm package facts
+     package_facts:
+       manager: auto
+
+   - name: check if NRPE is already installed
+     debug:
+       var: ansible_facts.packages['nrpe']
+
+   - name: 
+     command: yum install docker-ce --nobest -y
+     when: "'nrpe' not in ansible_facts.packages"
+     register: install_res
+
+   - name: whether docker is installed now
+     debug:
+       var: install_res
