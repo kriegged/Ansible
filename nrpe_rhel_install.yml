@@ -3,19 +3,111 @@
   become: yes
   become_method: sudo
   tasks:
-   - name: Gather the rpm package facts
-     package_facts:
-       manager: auto
-
-   - name: check if NRPE is already installed
-     debug:
-       var: ansible_facts.packages['nrpe']
-
-   - name: 
-     command: yum install docker-ce --nobest -y
-     when: "'nrpe' not in ansible_facts.packages"
-     register: install_res
-
-   - name: whether docker is installed now
-     debug:
-       var: install_res
+  - name: Gather the rpm package facts
+    package_facts:
+      manager: auto
+  - name: Check if NRPE is already installed
+    debug:
+      var: ansible_facts.packages['nrpe']
+  - name: Download EPEL Repository file
+    get-url:
+      url: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      dest: /tmp
+    when: "'nrpe' not in ansible_facts.packages"
+  - name: Install EPEL repository
+    yum:
+      name: /tmp/epel-release-latest-7.noarch.rpm
+      state: present
+    when: "'nrpe' not in ansible_facts.packages"
+  - name: Install NRPE
+    yum:
+      name:
+        - nrpe
+        - nagios-plugins-nrpe
+      state: present
+  - name: Install NRPE checks
+    yum:
+      name:
+        - nagios-plugins-breeze
+        - nagios-plugins-by_ssh
+        - nagios-plugins-cluster
+        - nagios-plugins-check-updates
+        - nagios-plugins-dig
+        - nagios-plugins-disk
+        - nagios-plugins-disk_smb
+        - nagios-plugins-dns
+        - nagios-plugins-dummy
+        - nagios-plugins-file_age
+        - nagios-plugins-flexlm
+        - nagios-plugins-ftp
+        - nagios-plugins-hpjd
+        - nagios-plugins-http
+        - nagios-plugins-ide_smart
+        - nagios-plugins-ifoperstatus
+        - nagios-plugins-ifstatus
+        - nagios-plugins-imap
+        - nagios-plugins-ircd
+        - nagios-plugins-jabber
+        - nagios-plugins-load
+        - nagios-plugins-log
+        - nagios-plugins-mailq
+        - nagios-plugins-mrtg
+        - nagios-plugins-mrtgtraf
+        - nagios-plugins-nagios
+        - nagios-plugins-nntp
+        - nagios-plugins-nntps
+        - nagios-plugins-nt
+        - nagios-plugins-ntp
+        - nagios-plugins-ntp_time
+        - nagios-plugins-nwstat
+        - nagios-plugins-oracle
+        - nagios-plugins-overcr
+        - nagios-plugins-ping
+        - nagios-plugins-pop
+        - nagios-plugins-procs
+        - nagios-plugins-real
+        - nagios-plugins-rpc
+        - nagios-plugins-sensors
+        - nagios-plugins-simap
+        - nagios-plugins-smtp
+        - nagios-plugins-snmp
+        - nagios-plugins-spop
+        - nagios-plugins-ssh
+        - nagios-plugins-ssmtp
+        - nagios-plugins-swap
+        - nagios-plugins-tcp
+        - nagios-plugins-time
+        - nagios-plugins-udp
+        - nagios-plugins-ups
+        - nagios-plugins-uptime
+        - nagios-plugins-users
+        - nagios-plugins-wave
+      state: present
+  - name: Backup NRPE Config
+    command: mv /etc/nagios/nrpe.cfg /etc/nagios/nrpe.cfg.default
+  - name: Copy NRPE Config
+    copy:
+      src: /opt/standards/file_store/applications/nrpe/nrpe_config/nrpe.cfg
+      dest: /etc/nagios/
+  - name: Copy custom checks
+    copy:
+      src: /opt/standards/file_store/applications/nrpe/custom_checks/
+      dest: /usr/lib64/nagios/plugins/
+  - name: Stop nrpe service
+    service:
+      name: nrpe
+      state: stopped
+  - name: Stop xinetd service
+    service:
+      name: xinetd
+      state: stopped
+    when: "'nrpe' in ansible_facts.packages"
+  - name: Stop nrpe service
+    service:
+      name: nrpe
+      state: started
+  - name: Stop xinetd service
+    service:
+      name: xinetd
+      state: started
+    when: "'nrpe' in ansible_facts.packages"
