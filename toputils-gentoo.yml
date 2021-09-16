@@ -1,6 +1,6 @@
 ---
 - hosts: Gentoo
-  tasks:      
+  tasks:
   - name: Emerge top utilities
     command: emerge -q htop iotop iftop
     become: true

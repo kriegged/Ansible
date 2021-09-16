@@ -27,7 +27,7 @@
       state: present
   - name: Copy RHEL 7 NRPE RPMs
     copy:
-      src: /opt/standards/file_store/applications/NRPE/RPMs
+      src: <file_location>  #Change <file_location> to the actual file location.
       dest: /tmp
   - name: Find all rpm files in /tmp folder
     find:
@@ -45,11 +45,11 @@
     command: mv /etc/nagios/nrpe.cfg /etc/nagios/nrpe.cfg.default
   - name: Copy NRPE Config
     copy:
-      src: /opt/standards/file_store/applications/NRPE/Config/nrpe.cfg
+      src: <file_location>  #Change <file_location> to the actual file location.
       dest: /etc/nagios/
 #  - name: Copy custom checks
 #    copy:
-#      src: /opt/standards/file_store/applications/nrpe/custom_checks/
+#      src: <file_location>  #Change <file_location> to the actual file location.
 #      dest: /usr/lib64/nagios/plugins/
   - name: Stop nrpe service
     service:

@@ -1,5 +1,5 @@
 ---
-- hosts: iv-app01.prd.paygateway.com
+- hosts: <hostname_or_ip>  #Change <hostname_or_ip> to the actual entry in the Ansible hosts file.
   become: yes
   become_method: sudo
   become_user: root
@@ -9,7 +9,7 @@
       manager: auto
   - name: Copy rhel6 net-snmp-libs 5.5 rpm
     copy:
-      src: /opt/standards/file_store/OS/rhel6/net-snmp-libs-5.5-60.el6_10.2.x86_64.rpm
+      src: <file_location>  #Change <file_location> to the actual file location.
       dest: /tmp
     when:
       - ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"

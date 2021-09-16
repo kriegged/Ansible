@@ -7,7 +7,7 @@
       path: /etc/portage/package.accept_keywords
     register: stat_result
 
-  - name: Create the file, if it doesnt exist already
+  - name: Create the file, if it doesn't exist already
     file:
       path: /etc/portage/package.accept_keywords
       state: touch
@@ -21,7 +21,7 @@
 
   - name: Emerge netdata
     command: emerge -q netdata
-  
+
   - service:
       name: netdata
       state: started

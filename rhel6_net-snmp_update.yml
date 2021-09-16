@@ -6,14 +6,14 @@
   tasks:
   - name: Copy rhel6 net-snmp-libs 5.5 rpm
     copy:
-      src: /opt/standards/file_store/OS/rhel6/net-snmp-libs-5.5-60.el6_10.2.x86_64.rpm
+      src: <file_location>  #Change <file_location> to the actual file location.
       dest: /tmp
     when:
       - ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"
       - package_facts['name'] == "net-snmp" and package_facts['version'] < "5.5"
   - name: Copy rhel6 net-snmp 5.5 rpm
     copy:
-      src: /opt/standards/file_store/OS/rhel6/net-snmp-5.5-60.el6_10.2.x86_64.rpm
+      src: <file_location>  #Change <file_location> to the actual file location.
       dest: /tmp
     when:
       - ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "6"
