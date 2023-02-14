@@ -1,9 +1,9 @@
 - name: veeam_user
-  hosts: lindon_qa_linux
+  hosts: host_group
   ansible.builtin.user:
-    name: svcveeam
+    name: username
     comment: Veeam_Service_Account
-    password: "$5$UrTMeP/E$B/wJqCP1aGnmYIsNRn4zhtRiSYaUeLySYgQtaq0IID4"
+    password: "<password_hash>"
     shell: /bin/bash
     groups: wheel
     state: present
