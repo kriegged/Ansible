@@ -1,0 +1,10 @@
+- name: veeam_user
+  hosts: lindon_qa_linux
+  ansible.builtin.user:
+    name: svcveeam
+    comment: Veeam_Service_Account
+    password: "$5$UrTMeP/E$B/wJqCP1aGnmYIsNRn4zhtRiSYaUeLySYgQtaq0IID4"
+    shell: /bin/bash
+    groups: wheel
+    state: present
+    createhome: yes
